@@ -1,1 +1,1 @@
-# AutoFlappy
+# src.autoflappy.AutoFlappy
