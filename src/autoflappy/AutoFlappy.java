@@ -1,16 +1,20 @@
 package autoflappy;
 
+import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class AutoFlappy {
 
-    static final String version = "1.0.0 Alpha";
+    private static final String version = "1.0.0 Alpha";
+    private int flappyX = Integer.MIN_VALUE;
+    private int pipeX = Integer.MIN_VALUE;
 
-    public void run() {
+    public void run(Scanner sc) {
         System.out.println("    _         _        _____ _                         ");
         System.out.println("   / \\  _   _| |_ ___ |  ___| | __ _ _ __  _ __  _   _ ");
         System.out.println("  / _ \\| | | | __/ _ \\| |_  | |/ _` | '_ \\| '_ \\| | | |");
@@ -18,9 +22,9 @@ public class AutoFlappy {
         System.out.println("/_/   \\_\\__,_|\\__\\___/|_|   |_|\\__,_| .__/| .__/ \\__, |");
         System.out.println("                                    |_|   |_|    |___/");
         System.out.println("--------------------------------------------------");
-        System.out.println("   =========== PROGRAM SOURCE CODE =========");
+        System.out.println("   ============ PROGRAM SOURCE CODE ==========");
         System.out.println("   = https://github.com/itsmarsss/AutoFlappy =");
-        System.out.println("   =========================================");
+        System.out.println("   ===========================================");
         System.out.println("      Welcome to AutoFlappy's Control Prompt");
         System.out.println();
         System.out.println("Purpose: This program was make to automatically play Flappy bird for you since you're bad at it.");
@@ -32,6 +36,80 @@ public class AutoFlappy {
         System.out.println("Version:" + versionCheck());
         System.out.println();
 
+        try {
+            commandPrompt(sc);
+        } catch (AWTException e) {
+            System.out.println("Error with robot class...");
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+
+    }
+
+    private void commandPrompt(Scanner sc) throws AWTException {
+        help();
+        String input = "";
+        while(true) {
+            System.out.print("Option:");
+            input = sc.next();
+            switch(input) {
+                case "help":
+                    help();
+                    break;
+                case "setup":
+                    setupAutoFlappy(sc);
+                    break;
+                case "start":
+                    startAutoFlappy();
+                    break;
+                case "quit":
+                    quit();
+                    break;
+                default:
+                    System.out.println("Unknown option; [help] for list of options.");
+            }
+        }
+    }
+
+    private void quit() {
+    }
+
+    private void startAutoFlappy() throws AWTException {
+        Robot rb = new Robot();
+    }
+
+    private void setupAutoFlappy(Scanner sc) {
+        while (pipeX < 0) {
+            System.out.println("Where to find pipes? (x coordinates):");
+            try {
+                pipeX = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, must be Integer.");
+                continue;
+            }
+            if (pipeX < 0) {
+                System.out.println("Invalid input, negative pixels on your monitor???");
+                pipeX = Integer.MIN_VALUE;
+            }
+        }
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("\t~ Look for Flappy at x = " + flappyX);
+        System.out.println("\t~ Look for Pipes at x = " + pipeX);
+    }
+
+    private void help() {
+        StringBuilder help = new StringBuilder();
+        help.append("help\t- this menu")
+                .append("\n")
+                .append("setup\t- setup coordinates")
+                .append("\n")
+                .append("start\t- start flappy (read warning)")
+                .append("\n")
+                .append("quit\t- quit playing AutoFlappy :(");
+
+        System.out.println(help.toString());
     }
 
     static String versionCheck() {
@@ -48,13 +126,13 @@ public class AutoFlappy {
             while ((line = reader.readLine()) != null)
                 note.append(line).append("\n");
 
-            if(note.toString().equals("Author's Note: "))
+            if (note.toString().equals("Author's Note: "))
                 note = new StringBuilder();
 
-        }catch(Exception e) {
+        } catch (Exception e) {
             return "Unable to check for version and creator's note";
         }
-        if(!newest.equals(version)) {
+        if (!newest.equals(version)) {
             return "   [There is a newer version of AutoFlappy]" +
                     "\n\t##############################################" +
                     "\n\t   " + version + "(current) >> " + newest + "(newer)" +
