@@ -17,7 +17,7 @@ public class AutoFlappy {
 
     private static final String version = "1.0.0 Alpha";
     private int flappyX = 640;
-    private int pipeX = 1400;
+    private int pipeX = 1360;
     private int topY = 100;
     private int bottomY = 2020;
     private Color flappyC = new Color(207, 194, 44);
@@ -96,15 +96,16 @@ public class AutoFlappy {
 
     private Robot rb;
 
-    private long lastClick = 0;
+    private int lastFlappy;
 
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
+        lastFlappy = bottomY-topY;
 
         while (true) {
-            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(567, topY, 1, bottomY - topY));
+            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(540, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
             int a = (rgb >> 24) & 0xFF;
@@ -119,10 +120,10 @@ public class AutoFlappy {
             BufferedImage findFlappy = rb.createScreenCapture(flappy);
             int flappyY = findFlappy(findFlappy);
 
-            if ((flappyY > (bottom + (top-bottom) * (1/5))) && (top > 0 && bottom > 0)) {
-                if(System.currentTimeMillis()-lastClick >= 250) {
+            if ((flappyY > (bottom + (top-bottom) * (3/10))) && (top > 0 && bottom > 0)) {
+               // if(System.currentTimeMillis()-lastClick >= 0) {
                     clickFlappy();
-                }
+               // }
             }
         }
     }
@@ -130,15 +131,14 @@ public class AutoFlappy {
     private void clickFlappy() {
         try {
             rb.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-            Thread.sleep(10);
+            Thread.sleep(20);
             rb.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-            lastClick = System.currentTimeMillis();
         } catch (Exception e) {
         }
     }
 
     private int findFlappy(BufferedImage findFlappy) {
-        for (int i = 0; i < bottomY - topY; i++) {
+        for (int i = lastFlappy-50; i < lastFlappy+50; i++) {
             int rgb = findFlappy.getRGB(0, i);
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
