@@ -1,6 +1,7 @@
 package autoflappy;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -13,8 +14,12 @@ public class AutoFlappy {
     private static final String version = "1.0.0 Alpha";
     private int flappyX = Integer.MIN_VALUE;
     private int pipeX = Integer.MIN_VALUE;
+    private int topY = Integer.MIN_VALUE;
+    private int bottomY = Integer.MIN_VALUE;
 
-    public void run(Scanner sc) {
+    private static Scanner sc = new Scanner(System.in);
+
+    public void run() {
         System.out.println("    _         _        _____ _                         ");
         System.out.println("   / \\  _   _| |_ ___ |  ___| | __ _ _ __  _ __  _   _ ");
         System.out.println("  / _ \\| | | | __/ _ \\| |_  | |/ _` | '_ \\| '_ \\| | | |");
@@ -37,7 +42,7 @@ public class AutoFlappy {
         System.out.println();
 
         try {
-            commandPrompt(sc);
+            commandPrompt();
         } catch (AWTException e) {
             System.out.println("Error with robot class...");
             e.printStackTrace();
@@ -47,18 +52,20 @@ public class AutoFlappy {
 
     }
 
-    private void commandPrompt(Scanner sc) throws AWTException {
+    private void commandPrompt() throws AWTException {
         help();
         String input = "";
-        while(true) {
+        while (true) {
+            System.out.println();
             System.out.print("Option:");
             input = sc.next();
-            switch(input) {
+            sc.nextLine();
+            switch (input) {
                 case "help":
                     help();
                     break;
                 case "setup":
-                    setupAutoFlappy(sc);
+                    setupAutoFlappy();
                     break;
                 case "start":
                     startAutoFlappy();
@@ -77,26 +84,44 @@ public class AutoFlappy {
 
     private void startAutoFlappy() throws AWTException {
         Robot rb = new Robot();
+        Rectangle flappy = new Rectangle(flappyX, topY, flappyX+1, bottomY);
+        Rectangle pipe = new Rectangle(pipeX, topY, pipeX+1, bottomY);
+        while(true) {
+            BufferedImage findFlappy = rb.createScreenCapture(flappy);
+            BufferedImage findPipe = rb.createScreenCapture(pipe);
+        }
     }
 
-    private void setupAutoFlappy(Scanner sc) {
+    private void setupAutoFlappy() {
+        flappyX = Integer.MIN_VALUE;
+        pipeX = Integer.MIN_VALUE;
+        topY = Integer.MIN_VALUE;
+        bottomY = Integer.MIN_VALUE;
+
+        while (flappyX < 0) {
+            System.out.println("Where to find flappy? (x coordinates):");
+            flappyX = sc.nextInt();
+
+        }
+
         while (pipeX < 0) {
             System.out.println("Where to find pipes? (x coordinates):");
-            try {
-                pipeX = sc.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, must be Integer.");
-                continue;
-            }
-            if (pipeX < 0) {
-                System.out.println("Invalid input, negative pixels on your monitor???");
-                pipeX = Integer.MIN_VALUE;
-            }
+            pipeX = sc.nextInt();
+        }
+
+        while (topY < 0) {
+            System.out.println("Game window highest? (y coordinates):");
+            topY = sc.nextInt();
+        }
+
+        while (bottomY < 0) {
+            System.out.println("Game window lowest? (y coordinates):");
+            bottomY = sc.nextInt();
         }
 
         System.out.println("--------------------------------------------------");
-        System.out.println("\t~ Look for Flappy at x = " + flappyX);
-        System.out.println("\t~ Look for Pipes at x = " + pipeX);
+        System.out.println("\t~ Look for Flappy at x = " + flappyX + " from y = " + topY + " to " + bottomY);
+        System.out.println("\t~ Look for Pipes at x = " + pipeX + " from y = " + topY + " to " + bottomY);
     }
 
     private void help() {

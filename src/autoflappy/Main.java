@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         AutoFlappy AF = new AutoFlappy();
-        AF.run(sc);
+        AF.run();// 640 1550 bkg(123,197,205) flappy(207,194,44) pipe(118,194,44)
     }
 }
