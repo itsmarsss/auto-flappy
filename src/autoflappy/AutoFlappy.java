@@ -24,9 +24,6 @@ public class AutoFlappy {
     private int flappyCG = 41;
     private int flappyCB = 54;
 
-    private int pipeCR = 118;
-    private int pipeCG = 194;
-    private int pipeCB = 44;
     private int pipeOutCR = 0;
     private int pipeOutCG = 135;
     private int pipeOutCB = 147;
@@ -109,7 +106,7 @@ public class AutoFlappy {
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
-        pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
+        pipe = new Rectangle(pipeX-300, topY, 600, bottomY - topY);
 
         while (true) {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(359, topY, 1, bottomY - topY));
@@ -164,8 +161,19 @@ public class AutoFlappy {
     private void updateTopBottom() {
         BufferedImage findPipe = rb.createScreenCapture(pipe);
         boolean foundTop = false;
+        int x = 0;
+        for(int i = 0; i < 400; i++){
+            int rgb = findPipe.getRGB(i, 5);
+            int a = (rgb >> 24) & 0xFF;
+            int r = (rgb >> 16) & 0xFF;
+            int g = (rgb >> 8) & 0xFF;
+            int b = (rgb) & 0xFF;
+            if(r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
+                x = i;
+            }
+        }
         for (int i = 0; i < bottomY - topY; i++) {
-            int rgb = findPipe.getRGB(0, i);
+            int rgb = findPipe.getRGB(x, i);
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
@@ -227,20 +235,14 @@ public class AutoFlappy {
         flappyCG = sc.nextInt();
         flappyCB = sc.nextInt();
 
-        System.out.println("Pipe color? (r, g, b):");
-        pipeCR = sc.nextInt();
-        pipeCG = sc.nextInt();
-        pipeCB = sc.nextInt();
-
-        System.out.println("Pipe outline color? (r, g, b):");
+        System.out.println("Background color? (r, g, b):");
         pipeOutCR = sc.nextInt();
         pipeOutCG = sc.nextInt();
         pipeOutCB = sc.nextInt();
 
         System.out.println("--------------------------------------------------");
-        System.out.println("\t~ Look for Flappy with color ");
-        System.out.println("\t~ Look for Pipe with color ");
-        System.out.println("\t~ Look for Pipe Outline with color ");
+        System.out.println("\t~ Look for Flappy with color (" + flappyCR + ", " + flappyCG + ", " + flappyCB + ")");
+        System.out.println("\t~ Look for Background with color (" + pipeOutCR + ", " + pipeOutCG + ", " + pipeOutCB + ")");
         System.out.println("--------------------------------------------------");
     }
 
