@@ -102,7 +102,7 @@ public class AutoFlappy {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
-        lastFlappy = bottomY-topY;
+        lastFlappy = (bottomY-topY)/2;
 
         while (true) {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(540, topY, 1, bottomY - topY));
