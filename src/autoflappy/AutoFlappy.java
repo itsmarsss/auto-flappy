@@ -20,9 +20,17 @@ public class AutoFlappy {
     private int pipeX = 1360;
     private int topY = 100;
     private int bottomY = 2020;
-    private Color flappyC = new Color(207, 194, 44);
-    private Color pipeC = new Color(118, 194, 44);
-    private Color pipeOutC = new Color(123, 197, 205);
+    private int flappyCR = 82;
+    private int flappyCG = 55;
+    private int flappyCB = 70;
+
+    private int pipeCR = 118;
+    private int pipeCG = 194;
+    private int pipeCB = 44;
+    private int pipeOutCR = 123;
+    private int pipeOutCG = 197;
+    private int pipeOutCB = 205;
+
 
     private static Scanner sc = new Scanner(System.in);
 
@@ -96,13 +104,12 @@ public class AutoFlappy {
 
     private Robot rb;
 
-    private int lastFlappy;
+    private double target;
 
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
-        lastFlappy = 910;
 
         while (true) {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(540, topY, 1, bottomY - topY));
@@ -113,17 +120,17 @@ public class AutoFlappy {
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
 
-            if (r == pipeC.getRed() && g == pipeC.getGreen() && b == pipeC.getBlue()) {
+            if (r == pipeCR && g == pipeCG && b == pipeCB) {
                 updateTopBottom();
             }
 
             BufferedImage findFlappy = rb.createScreenCapture(flappy);
             int flappyY = findFlappy(findFlappy);
 
-            if ((flappyY > (bottom + (top-bottom) * (3/10))) && (top > 0 && bottom > 0)) {
-               // if(System.currentTimeMillis()-lastClick >= 0) {
-                    clickFlappy();
-               // }
+            if ((flappyY > target) && (top > 0 && bottom > 0)) {
+                // if(System.currentTimeMillis()-lastClick >= 0) {
+                clickFlappy();
+                // }
             }
         }
     }
@@ -131,21 +138,23 @@ public class AutoFlappy {
     private void clickFlappy() {
         try {
             rb.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-            Thread.sleep(20);
+            Thread.sleep(100);
             rb.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            System.out.println("Clicked");
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private int findFlappy(BufferedImage findFlappy) {
-        for (int i = lastFlappy-250; i < lastFlappy+250; i++) {
+        for (int i = 0; i < bottomY - topY; i++) {
             int rgb = findFlappy.getRGB(0, i);
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
-            if (r == flappyC.getRed() && g == flappyC.getGreen() && b == flappyC.getBlue()) {
-                System.out.println("Flappy at y = "+ i);
+            if (r == flappyCR && g == flappyCG && b == flappyCB) {
+                System.out.println("Flappy at y = " + i + "\t Target at y = " + target);
                 return i;
             }
         }
@@ -163,15 +172,17 @@ public class AutoFlappy {
             int b = (rgb) & 0xFF;
 
             if (!foundTop) {
-                if (r == pipeOutC.getRed() && g == pipeOutC.getGreen() && b == pipeOutC.getBlue()) {
+                if (r == pipeOutCR && g == pipeOutCG && b == pipeOutCB) {
                     top = i;
                     i += 50;
                     foundTop = true;
                 }
             } else {
-                if (r != pipeOutC.getRed() || g != pipeOutC.getGreen() || b != pipeOutC.getBlue()) {
+                if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
                     bottom = i;
+                    target = (bottom + (top - bottom) * (0.455));
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
+                    System.out.println("Target - " + target);
                     return;
                 }
             }
@@ -212,18 +223,24 @@ public class AutoFlappy {
         System.out.println("--------------------------------------------------");
 
         System.out.println("Flappy color? (r, g, b):");
-        flappyC = new Color(sc.nextInt(), sc.nextInt(), sc.nextInt());
+        flappyCR = sc.nextInt();
+        flappyCG = sc.nextInt();
+        flappyCB = sc.nextInt();
 
         System.out.println("Pipe color? (r, g, b):");
-        pipeC = new Color(sc.nextInt(), sc.nextInt(), sc.nextInt());
+        pipeCR = sc.nextInt();
+        pipeCG = sc.nextInt();
+        pipeCB = sc.nextInt();
 
         System.out.println("Pipe outline color? (r, g, b):");
-        pipeOutC = new Color(sc.nextInt(), sc.nextInt(), sc.nextInt());
+        pipeOutCR = sc.nextInt();
+        pipeOutCG = sc.nextInt();
+        pipeOutCB = sc.nextInt();
 
         System.out.println("--------------------------------------------------");
-        System.out.println("\t~ Look for Flappy with color " + flappyC.toString());
-        System.out.println("\t~ Look for Pipe with color " + pipeC.toString());
-        System.out.println("\t~ Look for Pipe Outline with color " + pipeOutC.toString());
+        System.out.println("\t~ Look for Flappy with color ");
+        System.out.println("\t~ Look for Pipe with color ");
+        System.out.println("\t~ Look for Pipe Outline with color ");
         System.out.println("--------------------------------------------------");
     }
 
