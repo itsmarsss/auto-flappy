@@ -102,7 +102,7 @@ public class AutoFlappy {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
-        lastFlappy = (bottomY-topY)/2;
+        lastFlappy = 910;
 
         while (true) {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(540, topY, 1, bottomY - topY));
@@ -138,7 +138,7 @@ public class AutoFlappy {
     }
 
     private int findFlappy(BufferedImage findFlappy) {
-        for (int i = lastFlappy-50; i < lastFlappy+50; i++) {
+        for (int i = lastFlappy-250; i < lastFlappy+250; i++) {
             int rgb = findFlappy.getRGB(0, i);
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
