@@ -17,12 +17,12 @@ public class AutoFlappy {
 
     private static final String version = "1.0.0 Alpha";
     private int flappyX = 640;
-    private int pipeX = 1445;
+    private int pipeX = 1400;
     private int topY = 100;
     private int bottomY = 2020;
     private Color flappyC = new Color(207, 194, 44);
     private Color pipeC = new Color(118, 194, 44);
-    private Color pipeOutC = new Color(82, 55, 71);
+    private Color pipeOutC = new Color(123, 197, 205);
 
     private static Scanner sc = new Scanner(System.in);
 
@@ -96,13 +96,16 @@ public class AutoFlappy {
 
     private Robot rb;
 
+    private long lastClick = 0;
+
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
         flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
+
         while (true) {
-            BufferedImage findFlappy = rb.createScreenCapture(flappy);
-            int rgb = findFlappy.getRGB(0, 2);
+            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(567, topY, 1, bottomY - topY));
+            int rgb = checkPipe.getRGB(0, 2);
 
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
@@ -113,16 +116,13 @@ public class AutoFlappy {
                 updateTopBottom();
             }
 
+            BufferedImage findFlappy = rb.createScreenCapture(flappy);
             int flappyY = findFlappy(findFlappy);
 
-            if ((flappyY > (bottom + (top-bottom) * (2/3))) && (top > 0 && bottom > 0)) {
-                clickFlappy();
-            }
-
-            try {
-                Thread.sleep(175);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            if ((flappyY > (bottom + (top-bottom) * (1/5))) && (top > 0 && bottom > 0)) {
+                if(System.currentTimeMillis()-lastClick >= 250) {
+                    clickFlappy();
+                }
             }
         }
     }
@@ -132,6 +132,7 @@ public class AutoFlappy {
             rb.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             Thread.sleep(10);
             rb.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            lastClick = System.currentTimeMillis();
         } catch (Exception e) {
         }
     }
@@ -168,7 +169,7 @@ public class AutoFlappy {
                     foundTop = true;
                 }
             } else {
-                if (r == pipeOutC.getRed() && g == pipeOutC.getGreen() && b == pipeOutC.getBlue()) {
+                if (r != pipeOutC.getRed() || g != pipeOutC.getGreen() || b != pipeOutC.getBlue()) {
                     bottom = i;
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
                     return;
