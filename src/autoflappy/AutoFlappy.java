@@ -1,8 +1,11 @@
 package autoflappy;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -16,6 +19,8 @@ public class AutoFlappy {
     private int pipeX = Integer.MIN_VALUE;
     private int topY = Integer.MIN_VALUE;
     private int bottomY = Integer.MIN_VALUE;
+    private Color flappyC = new Color(0, 0, 0);
+    private Color pipeC = new Color(0, 0, 0);
 
     private static Scanner sc = new Scanner(System.in);
 
@@ -82,13 +87,42 @@ public class AutoFlappy {
     private void quit() {
     }
 
+    private int top = 0;
+    private int bottom = 0;
+
+    private Rectangle flappy, pipe;
+
+    private Robot rb;
+
     private void startAutoFlappy() throws AWTException {
-        Robot rb = new Robot();
-        Rectangle flappy = new Rectangle(flappyX, topY, flappyX+1, bottomY);
-        Rectangle pipe = new Rectangle(pipeX, topY, pipeX+1, bottomY);
-        while(true) {
-            BufferedImage findFlappy = rb.createScreenCapture(flappy);
-            BufferedImage findPipe = rb.createScreenCapture(pipe);
+        new Robot();
+        flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
+        pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
+        //while(true) {
+        BufferedImage findFlappy = rb.createScreenCapture(flappy);
+        int rgb = findFlappy.getRGB(0, 2);
+
+        int a = (rgb >> 24) & 0xFF;
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = (rgb) & 0xFF;
+
+        if (r == pipeC.getRed() && g == pipeC.getGreen() && b == pipeC.getBlue()) {
+            updateTopBottom();
+        }
+
+
+        //}
+    }
+
+    private void updateTopBottom() {
+        BufferedImage findPipe = rb.createScreenCapture(pipe);
+        for (int i = 0; i < bottomY - topY; i++) {
+            int rgb = findPipe.getRGB(0, i);
+            int a = (rgb >> 24) & 0xFF;
+            int r = (rgb >> 16) & 0xFF;
+            int g = (rgb >> 8) & 0xFF;
+            int b = (rgb) & 0xFF;
         }
     }
 
@@ -122,6 +156,18 @@ public class AutoFlappy {
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy at x = " + flappyX + " from y = " + topY + " to " + bottomY);
         System.out.println("\t~ Look for Pipes at x = " + pipeX + " from y = " + topY + " to " + bottomY);
+        System.out.println("--------------------------------------------------");
+
+        System.out.println("Flappy color? (r, g, b):");
+        flappyC = new Color(sc.nextInt(), sc.nextInt(), sc.nextInt());
+
+        System.out.println("Pipe color? (r, g, b):");
+        pipeC = new Color(sc.nextInt(), sc.nextInt(), sc.nextInt());
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("\t~ Look for Flappy with color " + flappyC);
+        System.out.println("\t~ Look for Pipe with color " + pipeC);
+        System.out.println("--------------------------------------------------");
     }
 
     private void help() {
