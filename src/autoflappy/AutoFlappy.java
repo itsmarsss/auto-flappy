@@ -1,16 +1,12 @@
 package autoflappy;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AutoFlappy {
@@ -29,7 +25,7 @@ public class AutoFlappy {
     private int pipeOutCB = 147;
 
 
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
     public void run() {
         System.out.println("    _         _        _____ _                         ");
@@ -58,7 +54,7 @@ public class AutoFlappy {
         } catch (AWTException e) {
             System.out.println("Error with robot class...");
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
 
 
@@ -66,7 +62,7 @@ public class AutoFlappy {
 
     private void commandPrompt() throws AWTException {
         help();
-        String input = "";
+        String input;
         while (true) {
             System.out.println();
             System.out.print("Option:");
@@ -83,7 +79,8 @@ public class AutoFlappy {
                     startAutoFlappy();
                     break;
                 case "quit":
-                    quit();
+                    System.out.println("ByeBye");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Unknown option; [help] for list of options.");
@@ -91,13 +88,10 @@ public class AutoFlappy {
         }
     }
 
-    private void quit() {
-    }
-
     private int top = -1;
     private int bottom = -1;
 
-    private Rectangle flappy, pipe;
+    private Rectangle pipe;
 
     private Robot rb;
 
@@ -105,7 +99,7 @@ public class AutoFlappy {
 
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
-        flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
+        Rectangle flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX-300, topY, 600, bottomY - topY);
 
         while (true) {
@@ -247,16 +241,15 @@ public class AutoFlappy {
     }
 
     private void help() {
-        StringBuilder help = new StringBuilder();
-        help.append("help\t- this menu")
-                .append("\n")
-                .append("setup\t- setup coordinates")
-                .append("\n")
-                .append("start\t- start flappy (read warning)")
-                .append("\n")
-                .append("quit\t- quit playing AutoFlappy :(");
+        String help = "help\t- this menu" +
+                "\n" +
+                "setup\t- setup coordinates" +
+                "\n" +
+                "start\t- start flappy (read warning)" +
+                "\n" +
+                "quit\t- quit playing AutoFlappy :(";
 
-        System.out.println(help.toString());
+        System.out.println(help);
     }
 
     static String versionCheck() {
