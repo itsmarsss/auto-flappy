@@ -16,20 +16,20 @@ import java.util.Scanner;
 public class AutoFlappy {
 
     private static final String version = "1.0.0 Alpha";
-    private int flappyX = 640;
-    private int pipeX = 1360;
-    private int topY = 100;
-    private int bottomY = 2020;
-    private int flappyCR = 82;
-    private int flappyCG = 55;
-    private int flappyCB = 70;
+    private int flappyX = 487;
+    private int pipeX = 719;
+    private int topY = 460;
+    private int bottomY = 1157;
+    private int flappyCR = 65;
+    private int flappyCG = 41;
+    private int flappyCB = 54;
 
     private int pipeCR = 118;
     private int pipeCG = 194;
     private int pipeCB = 44;
-    private int pipeOutCR = 123;
-    private int pipeOutCG = 197;
-    private int pipeOutCB = 205;
+    private int pipeOutCR = 0;
+    private int pipeOutCG = 135;
+    private int pipeOutCB = 147;
 
 
     private static Scanner sc = new Scanner(System.in);
@@ -112,7 +112,7 @@ public class AutoFlappy {
         pipe = new Rectangle(pipeX, topY, 1, bottomY - topY);
 
         while (true) {
-            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(540, topY, 1, bottomY - topY));
+            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(359, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
             int a = (rgb >> 24) & 0xFF;
@@ -120,7 +120,7 @@ public class AutoFlappy {
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
 
-            if (r == pipeCR && g == pipeCG && b == pipeCB) {
+            if (r != pipeOutCR && g != pipeOutCG && b != pipeOutCB) {
                 updateTopBottom();
             }
 
@@ -180,7 +180,7 @@ public class AutoFlappy {
             } else {
                 if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
                     bottom = i;
-                    target = (bottom + (top - bottom) * (0.455));
+                    target = (bottom + (top - bottom) * (0.55));
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
                     System.out.println("Target - " + target);
                     return;

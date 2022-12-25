@@ -1,9 +1,5 @@
 package autoflappy;
 
-import java.awt.*;
-import java.awt.event.InputEvent;
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
         AutoFlappy AF = new AutoFlappy();
