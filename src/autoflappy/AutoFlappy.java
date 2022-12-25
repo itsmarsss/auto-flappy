@@ -115,7 +115,7 @@ public class AutoFlappy {
 
             int flappyY = findFlappy(findFlappy);
 
-            if (flappyY < (top + bottom) / 2) {
+            if (flappyY > (top + bottom) / 2) {
                 clickFlappy();
             }
 
@@ -168,7 +168,7 @@ public class AutoFlappy {
                     foundTop = true;
                 }
             } else {
-                if (r == pipeOutC.getRed() || g == pipeOutC.getGreen() || b == pipeOutC.getBlue()) {
+                if (r == pipeOutC.getRed() && g == pipeOutC.getGreen() && b == pipeOutC.getBlue()) {
                     bottom = i;
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
                     return;
