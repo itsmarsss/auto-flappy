@@ -16,13 +16,13 @@ import java.util.Scanner;
 public class AutoFlappy {
 
     private static final String version = "1.0.0 Alpha";
-    private int flappyX = Integer.MIN_VALUE;
-    private int pipeX = Integer.MIN_VALUE;
-    private int topY = Integer.MIN_VALUE;
-    private int bottomY = Integer.MIN_VALUE;
-    private Color flappyC = new Color(0, 0, 0);
-    private Color pipeC = new Color(0, 0, 0);
-    private Color pipeOutC = new Color(0, 0, 0);
+    private int flappyX = 640;
+    private int pipeX = 1445;
+    private int topY = 100;
+    private int bottomY = 2020;
+    private Color flappyC = new Color(207, 194, 44);
+    private Color pipeC = new Color(118, 194, 44);
+    private Color pipeOutC = new Color(82, 55, 71);
 
     private static Scanner sc = new Scanner(System.in);
 
@@ -89,8 +89,8 @@ public class AutoFlappy {
     private void quit() {
     }
 
-    private int top = Integer.MAX_VALUE;
-    private int bottom = Integer.MAX_VALUE;
+    private int top = -1;
+    private int bottom = -1;
 
     private Rectangle flappy, pipe;
 
@@ -115,12 +115,12 @@ public class AutoFlappy {
 
             int flappyY = findFlappy(findFlappy);
 
-            if (flappyY > (top + bottom) / 2) {
+            if ((flappyY > (bottom + (top-bottom) * (2/3))) && (top > 0 && bottom > 0)) {
                 clickFlappy();
             }
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(175);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
