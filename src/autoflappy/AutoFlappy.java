@@ -89,8 +89,8 @@ public class AutoFlappy {
     private void quit() {
     }
 
-    private int top = 0;
-    private int bottom = 0;
+    private int top = Integer.MAX_VALUE;
+    private int bottom = Integer.MAX_VALUE;
 
     private Rectangle flappy, pipe;
 
