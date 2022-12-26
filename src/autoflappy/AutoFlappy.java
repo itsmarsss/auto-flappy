@@ -13,16 +13,16 @@ public class AutoFlappy {
 
     private static final String version = "1.0.0 Alpha";
     private int flappyX = 487;
-    private int pipeX = 719;
+    private int pipeX = 743;
     private int topY = 460;
     private int bottomY = 1157;
     private int flappyCR = 65;
     private int flappyCG = 41;
     private int flappyCB = 54;
 
-    private int pipeOutCR = 0;
-    private int pipeOutCG = 135;
-    private int pipeOutCB = 147;
+    private int pipeOutCR = 255;
+    private int pipeOutCG = 255;
+    private int pipeOutCB = 255;
 
 
     private static final Scanner sc = new Scanner(System.in);
@@ -91,7 +91,7 @@ public class AutoFlappy {
     private int top = -1;
     private int bottom = -1;
 
-    private Rectangle pipe;
+    private Rectangle flappy, pipe;
 
     private Robot rb;
 
@@ -99,11 +99,11 @@ public class AutoFlappy {
 
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
-        Rectangle flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
-        pipe = new Rectangle(pipeX-300, topY, 600, bottomY - topY);
+        flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
+        pipe = new Rectangle(pipeX-200, topY, 400, bottomY - topY);
 
         while (true) {
-            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(359, topY, 1, bottomY - topY));
+            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(400, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
             int a = (rgb >> 24) & 0xFF;
