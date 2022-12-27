@@ -14,6 +14,7 @@ public class AutoFlappy {
     private static final String version = "1.0.0 Alpha";
     private int flappyX = 487;
     private int pipeX = 743;
+    private int checkPipeX = 400;
     private int topY = 460;
     private int bottomY = 1157;
     private int flappyCR = 65;
@@ -24,6 +25,8 @@ public class AutoFlappy {
     private int pipeOutCG = 255;
     private int pipeOutCB = 255;
 
+    private int range = 400;
+    private double targetPercent = 0.55;
 
     private static final Scanner sc = new Scanner(System.in);
 
@@ -91,7 +94,7 @@ public class AutoFlappy {
     private int top = -1;
     private int bottom = -1;
 
-    private Rectangle flappy, pipe;
+    private Rectangle pipe;
 
     private Robot rb;
 
@@ -99,11 +102,11 @@ public class AutoFlappy {
 
     private void startAutoFlappy() throws AWTException {
         rb = new Robot();
-        flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
-        pipe = new Rectangle(pipeX-200, topY, 400, bottomY - topY);
+        Rectangle flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
+        pipe = new Rectangle(pipeX - (range / 2), topY, range, bottomY - topY);
 
         while (true) {
-            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(400, topY, 1, bottomY - topY));
+            BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(checkPipeX, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
             int a = (rgb >> 24) & 0xFF;
@@ -156,13 +159,13 @@ public class AutoFlappy {
         BufferedImage findPipe = rb.createScreenCapture(pipe);
         boolean foundTop = false;
         int x = 0;
-        for(int i = 0; i < 400; i++){
+        for (int i = 0; i < range; i++) {
             int rgb = findPipe.getRGB(i, 5);
             int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
-            if(r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
+            if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
                 x = i;
             }
         }
@@ -176,13 +179,12 @@ public class AutoFlappy {
             if (!foundTop) {
                 if (r == pipeOutCR && g == pipeOutCG && b == pipeOutCB) {
                     top = i;
-                    i += 50;
                     foundTop = true;
                 }
             } else {
                 if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
                     bottom = i;
-                    target = (bottom + (top - bottom) * (0.55));
+                    target = (bottom + (top - bottom) * (targetPercent));
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
                     System.out.println("Target - " + target);
                     return;
@@ -195,8 +197,11 @@ public class AutoFlappy {
     private void setupAutoFlappy() {
         flappyX = Integer.MIN_VALUE;
         pipeX = Integer.MIN_VALUE;
+        checkPipeX = Integer.MIN_VALUE;
         topY = Integer.MIN_VALUE;
         bottomY = Integer.MIN_VALUE;
+        range = Integer.MIN_VALUE;
+        targetPercent = Double.MIN_VALUE;
 
         while (flappyX < 0) {
             System.out.println("Where to find flappy? (x coordinates):");
@@ -209,6 +214,16 @@ public class AutoFlappy {
             pipeX = sc.nextInt();
         }
 
+        while (range < 0) {
+            System.out.println("Range for finding pipes? (range):");
+            range = sc.nextInt();
+        }
+
+        while (checkPipeX < 0) {
+            System.out.println("Where to find passed pipes? (x coordinates):");
+            checkPipeX = sc.nextInt();
+        }
+
         while (topY < 0) {
             System.out.println("Game window highest? (y coordinates):");
             topY = sc.nextInt();
@@ -219,9 +234,16 @@ public class AutoFlappy {
             bottomY = sc.nextInt();
         }
 
+        while (targetPercent < 0) {
+            System.out.println("Target value, percentage from bottom to top? (percentage as decimal):");
+            targetPercent = sc.nextInt();
+        }
+
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy at x = " + flappyX + " from y = " + topY + " to " + bottomY);
-        System.out.println("\t~ Look for Pipes at x = " + pipeX + " from y = " + topY + " to " + bottomY);
+        System.out.println("\t~ Look for Pipes at x = " + pipeX + " from y = " + topY + " to " + bottomY + " with range " + range);
+        System.out.println("\t~ Look for passed Pipes at x = " + checkPipeX + " from y = " + topY + " to " + bottomY);
+        System.out.println("\t~ Keep Flappy above " + targetPercent + " of the distance from bottom to top of pipes.");
         System.out.println("--------------------------------------------------");
 
         System.out.println("Flappy color? (r, g, b):");
