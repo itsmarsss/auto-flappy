@@ -1,4 +1,9 @@
-# AutoFlappy
+<h1 align="center">
+<img src="/assets/image.png" alt="Icon" width="100" height="100">
+<br>
+AutoFlappy
+<br>
+</h1>
 
 ## What is AutoFlappy
 AutoFlappy is a program that automatically plays Flappy Bird for you, with a bit of setting up, you can easily beat the World Record to most points achieved in Flappy Bird.
@@ -18,7 +23,7 @@ Brings up a help menu
 #### setup
 Setup coordinates the program scans as well as colors of elements on screen
 #### start
-Start AutoFlapping :warning: **run at your own risk; THERE IS NO KILL KEY** :warning:  
+Start AutoFlapping :warning: **Run at your own risk; THERE IS NO KILL KEY** :warning:  
 Once you've started, you cant stop; either close terminal/command prompt or terminate program.
 #### quit
 Quit the program
