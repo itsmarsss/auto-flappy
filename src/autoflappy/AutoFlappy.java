@@ -122,9 +122,7 @@ public class AutoFlappy {
             int flappyY = findFlappy(findFlappy);
 
             if ((flappyY > target) && (top > 0 && bottom > 0)) {
-                // if(System.currentTimeMillis()-lastClick >= 0) {
                 clickFlappy();
-                // }
             }
         }
     }
