@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class AutoFlappy {
 
-    private static final String version = "1.0.0 Alpha";
+    private static final String version = "3.4.5";
     private int flappyX = 487;
     private int pipeX = 743;
     private int checkPipeX = 400;
