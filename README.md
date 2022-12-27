@@ -30,5 +30,11 @@ Once you've started, you cant stop; either close terminal/command prompt or term
 #### quit
 Quit the program
 
+### Recommendation
+- Set Window scale to 100%, unless you want the program to scan the void.  
+
+- It is recommended that you use [this](https://scratch.mit.edu/projects/781130082/) Scratch project. I've edited its components to better assist the program in screen reading.  
+**Link:** https://scratch.mit.edu/projects/781130082/
+
 ## Video (Shameless self promo)
 [![Image Link](https://raw.githubusercontent.com/itsmarsss/AutoFlappy/main/assets/thumbnail.jpg)](https://www.youtube.com/watch?v=-sUVFuqVBdU)
