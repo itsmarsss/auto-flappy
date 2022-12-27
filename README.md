@@ -5,6 +5,9 @@ AutoFlappy
 <br>
 </h1>
 
+## NOTICE
+> :warning: :warning: :warning: **WARNING:** This project is no longer maintained; there may be bugs. Feel free to fork this repository, pull requests *may* be accepted. :warning: :warning: :warning:
+
 ## What is AutoFlappy
 AutoFlappy is a program that automatically plays Flappy Bird for you, with a bit of setting up, you can easily beat the World Record to most points achieved in Flappy Bird.
 
