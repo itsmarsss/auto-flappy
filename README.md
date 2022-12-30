@@ -19,7 +19,7 @@ You can run it in an IDE or build it into a jar, up to you.
 ### Lazy download
 If you're a lazy bum like me, head over to [[releases]](https://github.com/itsmarsss/AutoFlappy/releases), and download the most recent version.  
 Make sure to run the jar file in terminal/command prompt, so you can actually issue commands.  
-`java -jar "AutoFlappy-[append version here].jar"`
+`java -jar "AutoFlappy-[append version here]"`
 
 ## Usage
 ### Options
