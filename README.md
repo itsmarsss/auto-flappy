@@ -39,5 +39,7 @@ Quit the program
 - It is recommended that you use [this](https://scratch.mit.edu/projects/781130082/) Scratch project. I've edited its components to better assist the program in screen reading.  
 **Link:** https://scratch.mit.edu/projects/781130082/
 
-## Video (Shameless self promo)
+## Video
+<p align="center">Making of the program: https://www.youtube.com/watch?v=-sUVFuqVBdU</p>
+
 [![Image Link](https://img.youtube.com/vi/-sUVFuqVBdU/maxresdefault.jpg)](https://www.youtube.com/watch?v=-sUVFuqVBdU)
