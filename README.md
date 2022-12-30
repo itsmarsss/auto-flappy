@@ -40,4 +40,4 @@ Quit the program
 **Link:** https://scratch.mit.edu/projects/781130082/
 
 ## Video (Shameless self promo)
-[![Image Link](https://raw.githubusercontent.com/itsmarsss/AutoFlappy/main/assets/thumbnail.jpg)](https://www.youtube.com/watch?v=-sUVFuqVBdU)
+[![Image Link](https://img.youtube.com/vi/-sUVFuqVBdU/maxresdefault.jpg)](https://www.youtube.com/watch?v=-sUVFuqVBdU)
