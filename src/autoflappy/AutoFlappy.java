@@ -202,13 +202,20 @@ public class AutoFlappy {
     }
 
     private void setupAutoFlappy() {
-        flappyX = Integer.MIN_VALUE;
-        pipeX = Integer.MIN_VALUE;
-        checkPipeX = Integer.MIN_VALUE;
-        topY = Integer.MIN_VALUE;
-        bottomY = Integer.MIN_VALUE;
-        range = Integer.MIN_VALUE;
-        targetPercent = Double.MIN_VALUE;
+        flappyX = -1;
+        pipeX = -1;
+        checkPipeX = -1;
+        topY = -1;
+        bottomY = -1;
+        range = -1;
+        targetPercent = -1;
+        flappyCR = -1;
+        flappyCG = -1;
+        flappyCB = -1;
+        pipeOutCR = -1;
+        pipeOutCG = -1;
+        pipeOutCB = -1;
+        colorTolerancePercent = -1;
 
         while (flappyX < 0) {
             System.out.println("Where to find flappy? (x coordinates):");
@@ -241,33 +248,40 @@ public class AutoFlappy {
             bottomY = sc.nextInt();
         }
 
-        while (targetPercent < 0) {
-            System.out.println("Target value, percentage from bottom to top? (percentage as decimal):");
-            targetPercent = sc.nextInt();
+        while (targetPercent < 0 || targetPercent > 100) {
+            System.out.println("Target value, percentage from bottom to top? (percentage):");
+            targetPercent = sc.nextDouble();
         }
 
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy at x = " + flappyX + " from y = " + topY + " to " + bottomY);
         System.out.println("\t~ Look for Pipes at x = " + pipeX + " from y = " + topY + " to " + bottomY + " with range " + range);
         System.out.println("\t~ Look for passed Pipes at x = " + checkPipeX + " from y = " + topY + " to " + bottomY);
-        System.out.println("\t~ Keep Flappy above " + targetPercent + " of the distance from bottom to top of pipes.");
+        System.out.println("\t~ Keep Flappy above " + targetPercent + "% of the distance from bottom to top of pipes.");
         System.out.println("--------------------------------------------------");
 
-        System.out.println("Flappy color? (r, g, b):");
-        flappyCR = sc.nextInt();
-        flappyCG = sc.nextInt();
-        flappyCB = sc.nextInt();
+        while (flappyCR < 0 || flappyCR > 255 ||
+                flappyCG < 0 || flappyCG > 255 ||
+                flappyCB < 0 || flappyCB > 255) {
+            System.out.println("Flappy color? (r g b):");
+            flappyCR = sc.nextInt();
+            flappyCG = sc.nextInt();
+            flappyCB = sc.nextInt();
+        }
 
-        System.out.println("Background color? (r, g, b):");
-        pipeOutCR = sc.nextInt();
-        pipeOutCG = sc.nextInt();
-        pipeOutCB = sc.nextInt();
+        while (pipeOutCR < 0 || pipeOutCR > 255 ||
+                pipeOutCG < 0 || pipeOutCG > 255 ||
+                pipeOutCB < 0 || pipeOutCB > 255) {
+            System.out.println("Background color? (r g b):");
+            pipeOutCR = sc.nextInt();
+            pipeOutCG = sc.nextInt();
+            pipeOutCB = sc.nextInt();
+        }
 
         while (colorTolerancePercent < 0 || colorTolerancePercent > 100) {
             System.out.println("Color check tolerance (percentage):");
             colorTolerancePercent = sc.nextDouble();
         }
-        System.out.println("Color check tolerance set to " + colorTolerancePercent + "%");
 
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy with color (" + flappyCR + ", " + flappyCG + ", " + flappyCB + ")");
