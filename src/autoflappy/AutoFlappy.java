@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class AutoFlappy {
 
-    private static final String version = "3.4.5";
+    private static final String version = "3.4.6";
     private int flappyX = 487;
     private int pipeX = 743;
     private int checkPipeX = 400;
@@ -24,6 +24,8 @@ public class AutoFlappy {
     private int pipeOutCR = 255;
     private int pipeOutCG = 255;
     private int pipeOutCB = 255;
+
+    private double colorTolerancePercent = 10;
 
     private int range = 400;
     private double targetPercent = 0.55;
@@ -141,11 +143,11 @@ public class AutoFlappy {
     private int findFlappy(BufferedImage findFlappy) {
         for (int i = 0; i < bottomY - topY; i++) {
             int rgb = findFlappy.getRGB(0, i);
-            int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
-            if (r == flappyCR && g == flappyCG && b == flappyCB) {
+
+            if (isColorWithinTolerance(r, g, b, flappyCR, flappyCG, flappyCB, colorTolerancePercent)) {
                 System.out.println("Flappy at y = " + i + "\t Target at y = " + target);
                 return i;
             }
@@ -153,42 +155,49 @@ public class AutoFlappy {
         return 0;
     }
 
+    private boolean isColorWithinTolerance(int r1, int g1, int b1, int r2, int g2, int b2, double tolerancePercent) {
+        double tolerance = 255 * (tolerancePercent / 100);
+
+        return Math.abs(r1 - r2) <= tolerance &&
+                Math.abs(g1 - g2) <= tolerance &&
+                Math.abs(b1 - b2) <= tolerance;
+    }
+
     private void updateTopBottom() {
         BufferedImage findPipe = rb.createScreenCapture(pipe);
         boolean foundTop = false;
         int x = 0;
+
         for (int i = 0; i < range; i++) {
             int rgb = findPipe.getRGB(i, 5);
-            int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
-            if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
+            if (!isColorWithinTolerance(r, g, b, pipeOutCR, pipeOutCG, pipeOutCB, colorTolerancePercent)) {
                 x = i;
             }
         }
+
         for (int i = 0; i < bottomY - topY; i++) {
             int rgb = findPipe.getRGB(x, i);
-            int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
 
             if (!foundTop) {
-                if (r == pipeOutCR && g == pipeOutCG && b == pipeOutCB) {
+                if (isColorWithinTolerance(r, g, b, pipeOutCR, pipeOutCG, pipeOutCB, colorTolerancePercent)) {
                     top = i;
                     foundTop = true;
                 }
             } else {
-                if (r != pipeOutCR || g != pipeOutCG || b != pipeOutCB) {
+                if (!isColorWithinTolerance(r, g, b, pipeOutCR, pipeOutCG, pipeOutCB, colorTolerancePercent)) {
                     bottom = i;
-                    target = (bottom + (top - bottom) * (targetPercent));
+                    target = (bottom + (top - bottom) * targetPercent);
                     System.out.println("Top:Low bounds - " + top + ":" + bottom);
                     System.out.println("Target - " + target);
                     return;
                 }
             }
-
         }
     }
 
@@ -254,9 +263,16 @@ public class AutoFlappy {
         pipeOutCG = sc.nextInt();
         pipeOutCB = sc.nextInt();
 
+        while (colorTolerancePercent < 0 || colorTolerancePercent > 100) {
+            System.out.println("Color check tolerance (percentage):");
+            colorTolerancePercent = sc.nextDouble();
+        }
+        System.out.println("Color check tolerance set to " + colorTolerancePercent + "%");
+
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy with color (" + flappyCR + ", " + flappyCG + ", " + flappyCB + ")");
         System.out.println("\t~ Look for Background with color (" + pipeOutCR + ", " + pipeOutCG + ", " + pipeOutCB + ")");
+        System.out.println("\t~ Use color check tolerance of " + colorTolerancePercent + "%");
         System.out.println("--------------------------------------------------");
     }
 
