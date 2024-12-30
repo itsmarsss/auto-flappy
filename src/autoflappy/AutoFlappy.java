@@ -252,6 +252,7 @@ public class AutoFlappy {
             System.out.println("Target value, percentage from bottom to top? (percentage):");
             targetPercent = sc.nextDouble();
         }
+        targetPercent /= 100;
 
         System.out.println("--------------------------------------------------");
         System.out.println("\t~ Look for Flappy at x = " + flappyX + " from y = " + topY + " to " + bottomY);
