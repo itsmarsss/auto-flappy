@@ -63,8 +63,7 @@ public class AutoFlappy {
         try {
             commandPrompt();
         } catch (AWTException e) {
-            System.out.println("Error with robot class...");
-            e.printStackTrace();
+            System.out.println("Error with robot class: " + e.getMessage());
             System.exit(1);
         }
 
@@ -113,11 +112,10 @@ public class AutoFlappy {
         Rectangle flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX - (range / 2), topY, range, bottomY - topY);
 
-        do {
+        while (true) {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(checkPipeX, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
-            int a = (rgb >> 24) & 0xFF;
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = (rgb) & 0xFF;
@@ -133,7 +131,7 @@ public class AutoFlappy {
                     (flappyY > minY)) {
                 clickFlappy();
             }
-        } while (true);
+        }
     }
 
     private void clickFlappy() {
@@ -143,7 +141,7 @@ public class AutoFlappy {
             rb.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             System.out.println("Clicked");
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error with clicking: " + e.getMessage());
         }
     }
 
