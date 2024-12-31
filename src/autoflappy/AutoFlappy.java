@@ -11,12 +11,18 @@ import java.util.Scanner;
 
 public class AutoFlappy {
 
-    private static final String version = "3.4.6";
+    private static final String version = "3.4.7";
+
     private int flappyX = 487;
+
     private int pipeX = 743;
     private int checkPipeX = 400;
+
     private int topY = 460;
     private int bottomY = 1157;
+
+    private int minY = 1057;
+
     private int flappyCR = 65;
     private int flappyCG = 41;
     private int flappyCB = 54;
@@ -107,7 +113,7 @@ public class AutoFlappy {
         Rectangle flappy = new Rectangle(flappyX, topY, 1, bottomY - topY);
         pipe = new Rectangle(pipeX - (range / 2), topY, range, bottomY - topY);
 
-        while (true) {
+        do {
             BufferedImage checkPipe = rb.createScreenCapture(new Rectangle(checkPipeX, topY, 1, bottomY - topY));
             int rgb = checkPipe.getRGB(0, 2);
 
@@ -123,10 +129,11 @@ public class AutoFlappy {
             BufferedImage findFlappy = rb.createScreenCapture(flappy);
             int flappyY = findFlappy(findFlappy);
 
-            if ((flappyY > target) && (top > 0 && bottom > 0)) {
+            if (((flappyY > target) && (top > 0 && bottom > 0)) ||
+                    (flappyY > minY)) {
                 clickFlappy();
             }
-        }
+        } while (true);
     }
 
     private void clickFlappy() {
@@ -136,7 +143,7 @@ public class AutoFlappy {
             rb.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             System.out.println("Clicked");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -207,6 +214,7 @@ public class AutoFlappy {
         checkPipeX = -1;
         topY = -1;
         bottomY = -1;
+        minY = -1;
         range = -1;
         targetPercent = -1;
         flappyCR = -1;
@@ -246,6 +254,11 @@ public class AutoFlappy {
         while (bottomY < 0) {
             System.out.println("Game window lowest? (y coordinates):");
             bottomY = sc.nextInt();
+        }
+
+        while (minY < 0) {
+            System.out.println("Lowest allowed flappy? (y coordinates):");
+            minY = sc.nextInt();
         }
 
         while (targetPercent < 0 || targetPercent > 100) {
